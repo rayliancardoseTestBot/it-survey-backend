@@ -1,0 +1,18 @@
+{
+  "name": "it-survey-backend",
+  "version": "1.0.0",
+  "description": "IT post-ticket survey backend — Freshservice + Google Sheets",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}
