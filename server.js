@@ -355,6 +355,91 @@ app.post('/comment', async (req, res) => {
 });
 
 /**
+ * GET /survey
+ * Landing page with all rating buttons
+ */
+app.get('/survey', (req, res) => {
+  const { ticket, email, agent } = req.query;
+  if (!ticket) return res.status(400).send(renderError('Missing ticket parameter.', 400));
+
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rate Your Support Experience</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,Arial,sans-serif;background:#f0f4f8;min-height:100vh;
+         display:flex;align-items:center;justify-content:center;padding:24px}
+    .card{background:#fff;border-radius:12px;padding:48px 40px;max-width:600px;width:100%;
+          text-align:center;box-shadow:0 4px 24px rgba(0,0,0,.08)}
+    h1{font-size:24px;color:#111827;margin-bottom:10px}
+    .subtitle{font-size:14px;color:#6b7280;margin-bottom:28px}
+    .metric{margin-bottom:32px;text-align:left}
+    .metric-title{font-size:15px;font-weight:bold;color:#111827;margin-bottom:12px}
+    .metric-desc{font-size:13px;color:#6b7280;margin-bottom:10px}
+    .buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    a{display:inline-block;width:50px;height:50px;line-height:50px;text-align:center;
+      font-size:18px;font-weight:bold;text-decoration:none;border-radius:8px;border:1.5px solid;
+      transition:all 0.2s}
+    a:hover{transform:scale(1.05)}
+    .score-1{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}
+    .score-2{background:#ffedd5;color:#c2410c;border-color:#fdba74}
+    .score-3{background:#fef9c3;color:#a16207;border-color:#fde047}
+    .score-4{background:#dcfce7;color:#15803d;border-color:#86efac}
+    .score-5{background:#16a34a;color:#fff;border-color:#15803d}
+    .footer{margin-top:32px;font-size:12px;color:#9ca3af}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>How did we do?</h1>
+    <p class="subtitle">Rate your support experience (1 = Poor, 5 = Excellent)</p>
+
+    <div class="metric">
+      <div class="metric-title">1. Responsiveness</div>
+      <div class="metric-desc">How quickly was your issue resolved?</div>
+      <div class="buttons">
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+      </div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-title">2. Communication</div>
+      <div class="metric-desc">Were updates clear and professional?</div>
+      <div class="buttons">
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+      </div>
+    </div>
+
+    <div class="metric">
+      <div class="metric-title">3. Technical Resolution</div>
+      <div class="metric-desc">Was your issue fully resolved?</div>
+      <div class="buttons">
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+      </div>
+    </div>
+
+    <p class="footer">Ticket #${escapeHtml(String(ticket))}</p>
+  </div>
+</body>
+</html>`);
+});
+
+/**
  * GET /health
  * Health check endpoint
  */
