@@ -233,7 +233,7 @@ app.use((req, res, next) => {
  *   token   — HMAC token (optional)
  */
 app.get('/rate', async (req, res) => {
-  const { ticket, metric, score, email, agent, token } = req.query;
+  const { ticket, metric, score, requester_name, agent, token } = req.query;
 
   // ── Input validation ──────────────────────────────────────────────────────
   if (!ticket || !metric || !score) {
@@ -260,7 +260,7 @@ app.get('/rate', async (req, res) => {
       ticket,
       metric,
       score: scoreNum,
-      email: email || '',
+      requester_name: requester_name || '',
       agent: agent || '',
     });
 
@@ -359,7 +359,7 @@ app.post('/comment', async (req, res) => {
  * Landing page with all rating buttons
  */
 app.get('/survey', (req, res) => {
-  const { ticket, email, agent } = req.query;
+  const { ticket, requester_name, agent } = req.query;
   if (!ticket) return res.status(400).send(renderError('Missing ticket parameter.', 400));
 
   res.send(`<!DOCTYPE html>
@@ -401,11 +401,11 @@ app.get('/survey', (req, res) => {
       <div class="metric-title">1. Responsiveness</div>
       <div class="metric-desc">How quickly was your issue resolved?</div>
       <div class="buttons">
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=1&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=2&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=3&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=4&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=responsiveness&score=5&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
       </div>
     </div>
 
@@ -413,11 +413,11 @@ app.get('/survey', (req, res) => {
       <div class="metric-title">2. Communication</div>
       <div class="metric-desc">Were updates clear and professional?</div>
       <div class="buttons">
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=1&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=2&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=3&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=4&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=communication&score=5&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
       </div>
     </div>
 
@@ -425,11 +425,11 @@ app.get('/survey', (req, res) => {
       <div class="metric-title">3. Technical Resolution</div>
       <div class="metric-desc">Was your issue fully resolved?</div>
       <div class="buttons">
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=1&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=2&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=3&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=4&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
-        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=5&email=${escapeHtml(String(email || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=1&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-1">1</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=2&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-2">2</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=3&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-3">3</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=4&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-4">4</a>
+        <a href="/rate?ticket=${escapeHtml(String(ticket))}&metric=technical_resolution&score=5&requester_name=${escapeHtml(String(requester_name || ''))}&agent=${escapeHtml(String(agent || ''))}" class="score-5">5</a>
       </div>
     </div>
 
